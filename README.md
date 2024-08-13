@@ -42,3 +42,5 @@ Happy coding!
 
 ##Current realeases:
 - [DjangoChatBot v1.0](https://github.com/Aijcoder/DjangoChatBot/tree/main/DjangoChatBot%20V1.0): Basic version of the bot with light and dark theme.
+
+##Latest Version Is Now Running On: 95.179.201.107
