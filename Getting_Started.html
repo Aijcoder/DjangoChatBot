@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Django Chat Bot</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            line-height: 1.6;
+            margin: 0;
+            padding: 20px;
+            color: #333;
+            background-color: #f4f4f4;
+        }
+        h1, h2, h3, h4, h5, h6 {
+            color: #007bff;
+        }
+        code {
+            background-color: #f8f9fa;
+            border: 1px solid #e9ecef;
+            border-radius: 4px;
+            padding: 2px 4px;
+            font-size: 90%;
+            color: #e83e8c;
+        }
+        pre {
+            background-color: #343a40;
+            color: #f8f9fa;
+            padding: 10px;
+            border-radius: 4px;
+            overflow-x: auto;
+        }
+        ul, ol {
+            margin-left: 20px;
+        }
+        a {
+            color: #007bff;
+            text-decoration: none;
+        }
+        a:hover {
+            text-decoration: underline;
+        }
+        .container {
+            max-width: 800px;
+            margin: auto;
+            background: #fff;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0,0,0,0.1);
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Django Chat Bot</h1>
+        <p>Welcome to the <strong>Django Chat Bot</strong> project! This web chat AI bot utilizes the OpenAI API to provide interactive and intelligent responses. Follow the steps below to set up and run the project on your local machine.</p>
+        
+        <h2>Table of Contents</h2>
+        <ul>
+            <li><a href="#getting-started">Getting Started</a></li>
+            <li><a href="#installation">Installation</a></li>
+            <li><a href="#setup">Setup</a></li>
+            <li><a href="#running-the-project">Running the Project</a></li>
+            <li><a href="#contributing">Contributing</a></li>
+            <li><a href="#license">License</a></li>
+        </ul>
+
+        <h2 id="getting-started">Getting Started</h2>
+        <p>To get started with this project, ensure you have the following installed:</p>
+        <ul>
+            <li>Python 3.x</li>
+            <li><code>pip</code></li>
+            <li>Django</li>
+            <li>Any additional dependencies listed in <code>requirements.txt</code></li>
+        </ul>
+
+        <h2 id="installation">Installation</h2>
+        <ol>
+            <li><strong>Clone the Repository:</strong>
+                <pre><code>git clone https://github.com/Aijcoder/Django-Chat-Bot.git
+cd Django-Chat-Bot</code></pre>
+            </li>
+            <li><strong>Create a Virtual Environment:</strong>
+                <pre><code>python -m venv venv
+source venv/bin/activate  # On Windows use `venv\\Scripts\\activate`</code></pre>
+            </li>
+            <li><strong>Install Dependencies:</strong>
+                <pre><code>pip install -r requirements.txt</code></pre>
+            </li>
+        </ol>
+
+        <h2 id="setup">Setup</h2>
+        <ol>
+            <li><strong>Configure Environment Variables:</strong>
+                <ul>
+                    <li>Create a <code>.env</code> file in the project root directory.</li>
+                    <li>Add your environment-specific settings and secrets (e.g., OpenAI API keys) to the <code>.env</code> file. <strong>Ensure that this file is not included in version control for security reasons</strong>.</li>
+                </ul>
+            </li>
+            <li><strong>Collect Static Files:</strong>
+                <pre><code>python manage.py collectstatic</code></pre>
+                <p>Follow the prompts to confirm the collection.</p>
+            </li>
+            <li><strong>Apply Migrations:</strong>
+                <pre><code>python manage.py migrate</code></pre>
+            </li>
+        </ol>
+
+        <h2 id="running-the-project">Running the Project</h2>
+        <ol>
+            <li><strong>Start the Development Server:</strong>
+                <pre><code>python manage.py runserver</code></pre>
+            </li>
+            <li><strong>Access the Application:</strong>
+                <p>Open your web browser and navigate to <a href="http://127.0.0.1:8000">http://127.0.0.1:8000</a> to see your application in action.</p>
+            </li>
+        </ol>
+
+        <h2 id="contributing">Contributing</h2>
+        <p>If you would like to contribute to this project, please fork the repository and create a pull request with your proposed changes. Ensure that your code follows the project's coding style and includes appropriate tests.</p>
+
+        <h2 id="license">License</h2>
+        <p>This project is licensed under the MIT License - see the LICENSE file for details.</p>
+    </div>
+</body>
+</html>

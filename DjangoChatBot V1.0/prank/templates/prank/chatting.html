@@ -1,0 +1,859 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="csrf-token" content="{{ csrf_token }}">
+    <title>Advanced Chat AI</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style>
+        :root {
+            --primary-color: #4a90e2;
+            --primary-dark: #3a7bd5;
+            --secondary-color: #f5a623;
+            --success-color: #7ed321;
+            --danger-color: #d0021b;
+            --warning-color: #f5a623;
+            --info-color: #4a90e2;
+            --light-color: #f8f9fa;
+            --dark-color: #343a40;
+            --gray-100: #f8f9fa;
+            --gray-200: #e9ecef;
+            --gray-300: #dee2e6;
+            --gray-400: #ced4da;
+            --gray-500: #adb5bd;
+            --gray-600: #6c757d;
+            --gray-700: #495057;
+            --gray-800: #343a40;
+            --gray-900: #212529;
+            --font-family: 'Inter', sans-serif;
+            --body-bg: #ffffff;
+            --body-color: #212529;
+            --link-color: #4a90e2;
+            --link-hover-color: #3a7bd5;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: var(--font-family);
+            font-size: 16px;
+            line-height: 1.5;
+            color: var(--body-color);
+            background-color: var(--body-bg);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+
+        a {
+            color: var(--link-color);
+            text-decoration: none;
+            transition: color 0.3s ease;
+        }
+
+        a:hover {
+            color: var(--link-hover-color);
+        }
+
+        .container {
+            width: 100%;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 15px;
+        }
+
+        .header {
+            background-color: var(--primary-color);
+            color: #ffffff;
+            padding: 1rem 0;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            position: relative;
+            z-index: 1;
+        }
+
+        .header-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            font-size: 1.5rem;
+            font-weight: 700;
+        }
+
+        .nav-menu {
+            display: flex;
+            list-style-type: none;
+        }
+
+        .nav-item {
+            margin-left: 1.5rem;
+        }
+
+        .nav-link, .theme-toggle-btn {
+            color: #ffffff;
+            font-weight: 500;
+            border: none;
+            background: none;
+            cursor: pointer;
+        }
+
+        .main-content {
+            flex: 1;
+            display: flex;
+            width: 100%;
+            height: calc(100vh - 80px); /* Adjust height based on header/footer */
+        }
+
+        .sidebar {
+            width: 300px;
+            background-color: var(--gray-100);
+            border-right: 1px solid var(--gray-300);
+            padding: 1rem;
+            display: flex;
+            flex-direction: column;
+            overflow-y: auto;
+        }
+
+        .sidebar-header {
+            font-size: 1.25rem;
+            font-weight: 600;
+            margin-bottom: 1rem;
+            padding-bottom: 0.5rem;
+            border-bottom: 1px solid var(--gray-300);
+        }
+
+        .chat-history {
+            flex: 1;
+            overflow-y: auto;
+        }
+
+        .chat-item {
+            padding: 0.75rem;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+
+        .chat-item:hover {
+            background-color: var(--gray-200);
+        }
+
+        .chat-item.active {
+            background-color: var(--primary-color);
+            color: #ffffff;
+        }
+
+        .chat-container {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            padding: 1rem;
+            overflow: hidden;
+        }
+
+        .chat-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding-bottom: 1rem;
+            border-bottom: 1px solid var(--gray-300);
+            margin-bottom: 1rem;
+        }
+
+        .chat-title {
+            font-size: 1.5rem;
+            font-weight: 600;
+        }
+
+        .chat-actions {
+            display: flex;
+        }
+
+        .btn {
+            padding: 0.5rem 1rem;
+            border-radius: 4px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: background-color 0.3s ease, color 0.3s ease;
+        }
+
+        .btn-primary {
+            background-color: var(--primary-color);
+            color: #ffffff;
+            border: none;
+        }
+
+        .btn-primary:hover {
+            background-color: var(--primary-dark);
+        }
+
+        .btn-outline {
+            background-color: transparent;
+            border: 1px solid var(--primary-color);
+            color: var(--primary-color);
+            margin-left: 0.5rem;
+        }
+
+        .btn-outline:hover {
+            background-color: var(--primary-color);
+            color: #ffffff;
+        }
+
+        .chat-messages {
+            flex: 1;
+            overflow-y: auto;
+            padding-right: 1rem;
+            margin-bottom: 1rem;
+        }
+
+        .message {
+            display: flex;
+            margin-bottom: 1rem;
+        }
+
+        .message-content {
+            max-width: 70%;
+            padding: 0.75rem 1rem;
+            border-radius: 1rem;
+            box-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
+        }
+
+        .message-user .message-content {
+            background-color: var(--primary-color);
+            color: #ffffff;
+            border-bottom-right-radius: 0;
+            margin-left: auto;
+        }
+
+        .message-bot .message-content {
+            background-color: var(--gray-200);
+            border-bottom-left-radius: 0;
+        }
+
+        .message-meta {
+            font-size: 0.75rem;
+            color: var(--gray-600);
+            margin-top: 0.25rem;
+        }
+
+        .chat-input {
+            display: flex;
+            border-top: 1px solid var(--gray-300);
+            padding-top: 1rem;
+            align-items: center;
+        }
+
+        .chat-input textarea {
+            flex: 1;
+            padding: 0.75rem 1rem;
+            border: 1px solid var(--gray-300);
+            border-radius: 4px;
+            resize: none;
+            font-family: var(--font-family);
+            font-size: 1rem;
+            line-height: 1.5;
+            margin-right: 0.5rem;
+        }
+
+        .chat-input button {
+            padding: 0.75rem 1.5rem;
+            background-color: var(--primary-color);
+            color: #ffffff;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+
+        .chat-input button:hover {
+            background-color: var(--primary-dark);
+        }
+
+        .footer {
+            background-color: var(--gray-200);
+            padding: 1rem 0;
+            text-align: center;
+            font-size: 0.875rem;
+            color: var(--gray-600);
+        }
+
+        /* Contact Modal Styles */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background-color: #ffffff;
+            border: 1px solid var(--gray-300);
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+            padding: 2rem;
+            z-index: 1000;
+            width: 400px;
+        }
+
+        .modal.active {
+            display: block;
+        }
+
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1rem;
+        }
+
+        .modal-title {
+            font-size: 1.25rem;
+            font-weight: 600;
+        }
+
+        .modal-close {
+            font-size: 1.25rem;
+            cursor: pointer;
+        }
+
+        .modal-body {
+            margin-bottom: 1rem;
+        }
+
+        .modal-footer {
+            text-align: right;
+        }
+
+        .modal-button {
+            padding: 0.5rem 1rem;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+            margin-left: 0.5rem;
+        }
+
+        .modal-button.primary {
+            background-color: var(--primary-color);
+            color: #ffffff;
+        }
+
+        .modal-button.primary:hover {
+            background-color: var(--primary-dark);
+        }
+
+        .modal-button.secondary {
+            background-color: var(--gray-200);
+            color: var(--gray-700);
+        }
+
+        .modal-button.secondary:hover {
+            background-color: var(--gray-300);
+        }
+
+        /* Dark Mode Styles */
+        body[data-theme="dark"] {
+            --primary-color: #1e1e1e;
+            --primary-dark: #333;
+            --secondary-color: #f5a623;
+            --success-color: #7ed321;
+            --danger-color: #d0021b;
+            --warning-color: #f5a623;
+            --info-color: #4a90e2;
+            --light-color: #333;
+            --dark-color: #f8f9fa;
+            --gray-100: #1e1e1e;
+            --gray-200: #333;
+            --gray-300: #444;
+            --gray-400: #555;
+            --gray-500: #666;
+            --gray-600: #777;
+            --gray-700: #888;
+            --gray-800: #999;
+            --gray-900: #aaa;
+            --body-bg: #121212;
+            --body-color: #e0e0e0;
+            --link-color: #4a90e2;
+            --link-hover-color: #3a7bd5;
+        }
+
+        /* Dark Mode Overrides */
+        body[data-theme="dark"] .header {
+            background-color: var(--primary-color);
+        }
+
+        body[data-theme="dark"] .sidebar {
+            background-color: var(--gray-100);
+        }
+
+        body[data-theme="dark"] .chat-header {
+            border-bottom: 1px solid var(--gray-300);
+        }
+
+        body[data-theme="dark"] .footer {
+            background-color: var(--gray-200);
+        }
+
+        /* Light Mode Styles */
+        body[data-theme="light"] {
+            --primary-color: #4a90e2;
+            --primary-dark: #3a7bd5;
+            --secondary-color: #f5a623;
+            --success-color: #7ed321;
+            --danger-color: #d0021b;
+            --warning-color: #f5a623;
+            --info-color: #4a90e2;
+            --light-color: #f8f9fa;
+            --dark-color: #343a40;
+            --gray-100: #f8f9fa;
+            --gray-200: #e9ecef;
+            --gray-300: #dee2e6;
+            --gray-400: #ced4da;
+            --gray-500: #adb5bd;
+            --gray-600: #6c757d;
+            --gray-700: #495057;
+            --gray-800: #343a40;
+            --gray-900: #212529;
+            --body-bg: #ffffff;
+            --body-color: #212529;
+            --link-color: #4a90e2;
+            --link-hover-color: #3a7bd5;
+        }
+        .modal {
+            display: none;
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background-color: #ffffff;
+            border: 1px solid var(--gray-300);
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+            padding: 2rem;
+            z-index: 1000;
+            width: 400px;
+        }
+
+        .modal.active {
+            display: block;
+        }
+
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1rem;
+        }
+
+        .modal-title {
+            font-size: 1.25rem;
+            font-weight: 600;
+        }
+
+        .modal-close {
+            font-size: 1.25rem;
+            cursor: pointer;
+            border: none;
+            background: none;
+        }
+
+        .modal-body {
+            margin-bottom: 1rem;
+        }
+
+        .modal-footer {
+            text-align: right;
+        }
+
+        .modal-button {
+            padding: 0.5rem 1rem;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+
+        .modal-button.primary {
+            background-color: var(--primary-color);
+            color: #ffffff;
+        }
+
+        .modal-button.primary:hover {
+            background-color: var(--primary-dark);
+        }
+
+        .modal-button.secondary {
+            background-color: var(--gray-200);
+            color: var(--body-color);
+            margin-right: 0.5rem;
+        }
+
+        .modal-button.secondary:hover {
+            background-color: var(--gray-300);
+        }
+    </style>
+</head>
+<body>
+    <header class="header">
+        <div class="container header-content">
+            <div class="logo">Chat AI</div>
+            <button class="theme-toggle-btn" aria-label="Toggle dark mode">
+                <i class="fas fa-moon"></i>
+            </button>
+            <nav>
+                <ul class="nav-menu">
+                    <li class="nav-item"><a href="#home" class="nav-link">Home</a></li>
+                    <li class="nav-item"><a href="#about" class="nav-link">About</a></li>
+                    <li class="nav-item"><a href="#contact" class="nav-link" id="contact-btn">Contact</a></li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+
+    <div class="main-content container">
+        <aside class="sidebar">
+            <div class="sidebar-header">Chats</div>
+            <div class="chat-history" id="chat-history">
+                <!-- Chat items will be dynamically injected here -->
+            </div>
+        </aside>
+        <div class="chat-container">
+            <div class="chat-header">
+                <div class="chat-title" id="chat-title">Chat with AI</div>
+                <div class="chat-actions">
+                    <button class="btn btn-outline" id="new-chat-btn">New Chat</button>
+                    <button class="btn btn-outline" id="clear-chat-btn">Clear Chat</button>
+                    <button class="btn btn-primary" id="contact-btn">Contact Support</button>
+                </div>
+            </div>
+            <div class="chat-messages" id="chat-messages">
+                <!-- Messages will be dynamically injected here -->
+            </div>
+            <div class="chat-input">
+                <textarea rows="3" id="user-input" placeholder="Type your message..."></textarea>
+                <button id="send-message-btn">Send</button>
+            </div>
+        </div>
+    </div>
+
+    <footer class="footer">
+        &copy; 2024 Chat AI Interface
+    </footer>
+
+    <!-- Contact Modal -->
+    <div id="contact-modal" class="modal">
+        <div class="modal-header">
+            <div class="modal-title">Contact Support</div>
+            <span class="modal-close" id="contact-close-btn">&times;</span>
+        </div>
+        <div class="modal-body">
+            <p>If you have any questions, please reach out to our support team at support@example.com.</p>
+        </div>
+        <div class="modal-footer">
+            <button class="modal-button secondary" id="contact-close-btn">Close</button>
+        </div>
+    </div>
+
+    <!-- New Chat Modal -->
+    <div id="new-chat-modal" class="modal">
+        <div class="modal-header">
+            <div class="modal-title">New Chat</div>
+            <span class="modal-close" id="new-chat-close-btn">&times;</span>
+        </div>
+        <div class="modal-body">
+            <label for="chat-name">Chat Name:</label>
+            <input type="text" id="chat-name" placeholder="Enter chat name">
+        </div>
+        <div class="modal-footer">
+            <button class="modal-button secondary" id="new-chat-cancel-btn">Cancel</button>
+            <button class="modal-button primary" id="new-chat-confirm-btn">Create Chat</button>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const sendMessageBtn = document.getElementById('send-message-btn');
+            const userInput = document.getElementById('user-input');
+            const chatMessages = document.getElementById('chat-messages');
+            const chatTitle = document.getElementById('chat-title');
+            const clearChatBtn = document.getElementById('clear-chat-btn');
+            const newChatConfirmBtn = document.getElementById('new-chat-confirm-btn');
+            const chatNameInput = document.getElementById('chat-name');
+            const newChatModal = document.getElementById('new-chat-modal');
+            const contactModal = document.getElementById('contact-modal');
+            const contactCloseBtn = document.getElementById('contact-close-btn');
+            const newChatCloseBtn = document.getElementById('new-chat-close-btn');
+            const newChatCancelBtn = document.getElementById('new-chat-cancel-btn');
+            const newChatBtn = document.getElementById('new-chat-btn');
+            const chatHistory = document.getElementById('chat-history');
+
+            // Extract the username from a Django template variable
+            const username = "{{ username }}";
+            if (!username) {
+                console.error('Username not found');
+            }
+
+            // Retrieve CSRF token from the meta tag
+            const csrfToken = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
+            if (!csrfToken) {
+                console.error('CSRF token not found');
+                return;
+            }
+
+            let currentChatId = localStorage.getItem('currentChatId') || null;
+
+            async function fetchChatHistory() {
+                try {
+                    const response = await fetch(`/chat/${username}/history/`, {
+                        method: 'GET',
+                        headers: {
+                            'Content-Type': 'application/json',
+                            'X-CSRFToken': csrfToken
+                        }
+                    });
+
+                    if (!response.ok) {
+                        throw new Error('Network response was not ok.');
+                    }
+
+                    const data = await response.json();
+                    if (data.status === 'success') {
+                        populateChatHistory(data.sessions);
+                    } else {
+                        console.error('Error fetching chat history:', data.message);
+                    }
+                } catch (error) {
+                    console.error('Error:', error.message);
+                }
+            }
+
+            function populateChatHistory(sessions) {
+
+                            // Check if sessions is undefined or null
+                if (!sessions) {
+                    return;
+                }
+
+                chatHistory.innerHTML = '';
+
+                sessions.forEach(session => {
+                    const chatItem = document.createElement('div');
+                    chatItem.className = 'chat-item';
+                    chatItem.dataset.sessionId = session.id;
+                    chatItem.innerText = session.title || 'Untitled Chat';
+                    console.log(session.title);
+                    chatItem.addEventListener('click', () => {
+                        loadChat(session.id);
+                    });
+                    chatHistory.appendChild(chatItem);
+                });
+
+            }
+
+            async function loadChat(chatId) {
+                // Ensure currentChatId is updated and stored
+                localStorage.setItem('currentChatId', chatId);
+                currentChatId = chatId;
+
+                // Load chat messages
+                try {
+                    const response = await fetch(`/chat/${username}/${chatId}/history/`, {
+                        method: 'GET',
+                        headers: {
+                            'Content-Type': 'application/json',
+                            'X-CSRFToken': csrfToken  // Ensure csrfToken is correctly assigned
+                        }
+                    });
+
+                    // Check if response is okay
+                    if (!response.ok) {
+                        throw new Error('Network response was not ok.');
+                    }
+
+                    const data = await response.json();
+
+                    // Check for successful status in the response
+                    if (data.status === 'success') {
+                        chatMessages.innerHTML = ''; // Clear previous messages
+                        // Append each message to the chat window
+                        data.chat_history.forEach(message => {
+                            // Check if the number is even or odd and append the message accordingly
+                            if (message.number % 2 === 0) {
+                                // Even number: user format
+                                appendMessage('user', message.content);
+                            } else {
+                                // Odd number or no number found: bot format
+                                appendMessage('bot', message.content);
+                            }
+                        });
+
+                    } else {
+                        // Log specific error message if provided
+                        console.error('Error fetching chat messages:', data.message || 'Unknown error');
+                    }
+                } catch (error) {
+                    // Log errors and optionally provide user feedback
+                    console.error('Error:', error.message);
+                    alert('An error occurred while loading chat messages. Please try again.');
+                }
+            }
+
+            async function sendMessage() {
+                if (!currentChatId) return;
+
+                const content = userInput.value.trim();
+                if (!content) return;
+
+                appendMessage('user', content);
+                userInput.value = '';
+                sendMessageBtn.disabled = true;
+
+                try {
+                    const response = await fetch(`/chat/${username}/${currentChatId}/handle-message/`, {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                            'X-CSRFToken': csrfToken
+                        },
+                        body: JSON.stringify({ message: content })
+                    });
+
+                    if (!response.ok) {
+                        throw new Error('Network response was not ok.');
+                    }
+
+                    const data = await response.json();
+                    if (data.status === 'success') {
+                        appendMessage('bot', data.ai_response);
+                    } else {
+                        appendMessage('bot', 'Error: ' + data.message);
+                    }
+                } catch (error) {
+                    appendMessage('bot', 'Error: ' + error.message);
+                } finally {
+                    sendMessageBtn.disabled = false;
+                }
+            }
+
+            function appendMessage(user, content) {
+                // Create the outer message container div
+                const messageDiv = document.createElement('div');
+                messageDiv.className = 'message ' + (user === 'user' ? 'message-user' : 'message-bot');
+
+                // Create the inner content div
+                const messageContentDiv = document.createElement('div');
+                messageContentDiv.className = 'message-content';
+                messageContentDiv.textContent = content;
+
+                // Append the content div to the message container
+                messageDiv.appendChild(messageContentDiv);
+
+                // Append the message container to the chat messages container
+                chatMessages.appendChild(messageDiv);
+
+                // Scroll to the bottom of the chat messages container
+                chatMessages.scrollTop = chatMessages.scrollHeight;
+            }
+
+            function enableSendButton() {
+                sendMessageBtn.disabled = userInput.value.trim().length === 0;
+            }
+
+            sendMessageBtn.addEventListener('click', sendMessage);
+            userInput.addEventListener('input', enableSendButton);
+
+            clearChatBtn.addEventListener('click', () => {
+                if (confirm('Are you sure you want to delete the chat?')) {
+                    // Clear the chat messages in the DOM
+                    chatMessages.innerHTML = '';
+                    chatId = localStorage.getItem('currentChatId');
+                    // Send a DELETE request to the server
+                    fetch('/chat/${username}/${chatId}/delate', {
+                        method: 'DELETE',
+                        headers: {
+                            'Content-Type': 'application/json',
+                            'X-CSRFToken': getCookie('csrftoken')  // Get CSRF token if needed
+                        },
+                        body: JSON.stringify({
+                            chatName: 'your_chat_name_here'  // Replace with the actual chat name or ID
+                        })
+                    })
+                    .then(response => {
+                        if (response.ok) {
+                            alert('Chat deleted successfully.');
+                        } else {
+                            alert('Failed to delete chat.');
+                        }
+                    })
+                    .catch(error => {
+                        console.error('Error:', error);
+                        alert('An error occurred while deleting the chat.');
+                    });
+                }
+            });
+
+            newChatBtn.addEventListener('click', () => {
+                newChatModal.style.display = 'block';
+            });
+
+            newChatCloseBtn.addEventListener('click', () => {
+                newChatModal.style.display = 'none';
+            });
+
+            newChatCancelBtn.addEventListener('click', () => {
+                newChatModal.style.display = 'none';
+            });
+
+            newChatConfirmBtn.addEventListener('click', async () => {
+                const chatName = chatNameInput.value.trim();
+                if (!chatName) {
+                    alert('Please enter a chat name.');
+                    return;
+                }
+
+                try {
+                    const response = await fetch(`/chat/${username}/new/`, {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                            'X-CSRFToken': csrfToken
+                        },
+                        body: JSON.stringify({ title: chatName })
+                    });
+
+                    if (!response.ok) {
+                        throw new Error('Network response was not ok.');
+                    }
+
+                    const data = await response.json();
+                    if (data.status === 'success') {
+                        populateChatHistory(data.sessions);
+                        newChatModal.style.display = 'none';
+                    } else {
+                        console.error('Error creating chat:', data.message);
+                    }
+                } catch (error) {
+                    console.error('Error:', error.message);
+                }
+            });
+
+            contactCloseBtn.addEventListener('click', () => {
+                contactModal.style.display = 'none';
+            });
+
+            document.getElementById('contact-btn').addEventListener('click', () => {
+                contactModal.style.display = 'block';
+            });
+
+            // Initial load
+            fetchChatHistory();
+            enableSendButton(); // Initialize button state
+        });
+    </script>
+</body>
+</html>

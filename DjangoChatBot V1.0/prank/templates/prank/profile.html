@@ -1,0 +1,240 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Profile</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+            transition: background-color 0.3s, color 0.3s;
+        }
+
+        /* Light Mode */
+        .light-mode {
+            background-color: #c1d3c8; /* Pale Mint Green */
+            color: #333; /* Dark gray text for readability */
+        }
+
+        .light-mode .theme-switcher {
+            background-color: #333; /* Background for switcher */
+        }
+
+        .light-mode .start-chat-box {
+            background: #4caf50; /* Green background */
+            color: #fff;
+        }
+
+        .light-mode .start-chat-box:hover {
+            background: #45a049;
+        }
+
+        /* Dark Mode */
+        .dark-mode {
+            background-color: #121212; /* Dark background */
+            color: #e0e0e0; /* Light text */
+        }
+
+        .dark-mode .theme-switcher {
+            background-color: #333; /* Darker background for switcher */
+        }
+
+        .dark-mode .start-chat-box {
+            background: #6b73ff; /* Gradient background */
+            color: #e0e0e0;
+        }
+
+        .dark-mode .start-chat-box:hover {
+            background: #000dff;
+        }
+
+        /* Header styles */
+        header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 10px 20px;
+            background-color: #333; /* Dark grey background */
+            color: white;
+        }
+
+        header .title {
+            margin-left: auto;
+            margin-right: 20px;
+            font-size: 24px;
+        }
+
+        header .search-bar {
+            flex-grow: 1;
+            margin: 0 20px;
+            position: relative;
+        }
+
+        header .search-bar input {
+            width: 200px; /* Smaller width for the search bar */
+            padding: 8px 12px;
+            border-radius: 20px;
+            border: none;
+            font-size: 14px; /* Smaller font size */
+        }
+
+        /* Icons in the header */
+        header .icons {
+            display: flex;
+            align-items: center;
+        }
+
+        header .icons i {
+            margin: 0 10px;
+            cursor: pointer;
+            font-size: 20px;
+            padding: 10px; /* Padding to match button size */
+            border-radius: 50%;
+            transition: background-color 0.3s, color 0.3s;
+        }
+
+        /* Theme switcher button styling */
+        header .theme-switcher {
+            background-color: #444; /* Darker background for better visibility in light mode */
+            color: #e0e0e0; /* Light color for the icon */
+            padding: 10px;
+            border-radius: 50%;
+            cursor: pointer;
+        }
+
+        header .theme-icon {
+            font-size: 24px;
+        }
+
+        header .theme-icon.light-mode {
+            color: #333; /* Dark color for light mode icon */
+        }
+
+        header .theme-icon.dark-mode {
+            color: #e0e0e0; /* Light color for dark mode icon */
+        }
+
+        /* Optional hover effect for icons */
+        header .icons i:hover {
+            background-color: #555; /* Slightly lighter background on hover */
+            color: #fff; /* White color on hover */
+        }
+
+        .content {
+            flex: 1;
+            padding: 20px;
+            text-align: center;
+        }
+
+        .start-chat-box {
+            padding: 15px;
+            margin: 10px 0;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            cursor: pointer;
+            transition: background-color 0.3s, box-shadow 0.3s;
+            font-size: 20px;
+            font-weight: bold;
+        }
+
+        .start-chat-box:hover {
+            box-shadow: 0 0 15px rgba(0, 0, 0, 0.2);
+        }
+
+        .no-chat-message {
+            font-size: 18px;
+            color: #666;
+        }
+
+        /* Logout button styling */
+        .logout-button {
+            display: inline-block;
+            padding: 10px 20px;
+            margin: 10px;
+            border: none;
+            border-radius: 5px;
+            background-color: #ff4d4d; /* Red background */
+            color: #fff;
+            font-size: 16px;
+            cursor: pointer;
+            text-decoration: none;
+            transition: background-color 0.3s;
+        }
+
+        .logout-button:hover {
+            background-color: #e60000; /* Darker red on hover */
+        }
+    </style>
+</head>
+<body class="light-mode">
+    <header>
+        <div class="title">Chat AI BOT</div>
+        <div class="search-bar">
+            <input type="text" placeholder="Search...">
+        </div>
+        <div class="icons">
+            <i class="fas fa-bell"></i>
+            <i class="fas fa-user-circle" onclick="redirectToProfile()"></i>
+            <div class="theme-switcher" onclick="toggleTheme()">
+                <i id="theme-icon" class="fas fa-sun theme-icon light-mode"></i>
+            </div>
+        </div>
+    </header>
+
+    <div class="content">
+        <div id="start-chat" class="start-chat-box" onclick="startChatting()">
+            Start Chatting
+        </div>
+        <a href="/logout/" class="logout-button">Logout</a>
+    </div>
+
+    <script>
+        function redirectToProfile() {
+            window.location.href = "/profile/";
+        }
+
+        function toggleTheme() {
+            const body = document.body;
+            const themeIcon = document.getElementById('theme-icon');
+
+            if (body.classList.contains('light-mode')) {
+                body.classList.remove('light-mode');
+                body.classList.add('dark-mode');
+                themeIcon.classList.remove('fa-sun');
+                themeIcon.classList.add('fa-moon');
+                themeIcon.classList.remove('light-mode');
+                themeIcon.classList.add('dark-mode');
+                localStorage.setItem('theme', 'dark');
+            } else {
+                body.classList.remove('dark-mode');
+                body.classList.add('light-mode');
+                themeIcon.classList.remove('fa-moon');
+                themeIcon.classList.add('fa-sun');
+                themeIcon.classList.remove('dark-mode');
+                themeIcon.classList.add('light-mode');
+                localStorage.setItem('theme', 'light');
+            }
+        }
+
+        function startChatting() {
+            window.location.href = '/chat/';
+        }
+
+        window.onload = function() {
+            const savedTheme = localStorage.getItem('theme');
+            if (savedTheme) {
+                document.body.classList.remove('light-mode', 'dark-mode');
+                document.body.classList.add(savedTheme + '-mode');
+                document.getElementById('theme-icon').classList.remove('fa-sun', 'fa-moon');
+                document.getElementById('theme-icon').classList.add(savedTheme === 'light' ? 'fa-sun' : 'fa-moon');
+            }
+        };
+    </script>
+</body>
+</html>

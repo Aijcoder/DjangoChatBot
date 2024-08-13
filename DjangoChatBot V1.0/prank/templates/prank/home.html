@@ -1,0 +1,255 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Home</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+            transition: background-color 0.3s, color 0.3s;
+        }
+
+        /* Light Mode */
+        .light-mode {
+            background-color: #c1d3c8; /* Pale Mint Green */
+            color: #333; /* Dark gray text for readability */
+        }
+
+        .light-mode .theme-switcher {
+            background-color: #333; /* Background for switcher */
+        }
+
+        .light-mode .start-button {
+            background: linear-gradient(135deg, #4caf50, #81c784); /* Green gradient background */
+            box-shadow: 0 0 10px rgba(76, 175, 80, 0.7), 0 0 20px rgba(76, 175, 80, 0.5); /* Glowing effect */
+        }
+
+        .light-mode .start-button:hover {
+            transform: scale(1.1); /* Enlarge on hover */
+            box-shadow: 0 0 15px rgba(76, 175, 80, 0.7), 0 0 30px rgba(76, 175, 80, 0.5); /* Enhanced glowing effect on hover */
+        }
+
+        /* Dark Mode */
+        .dark-mode {
+            background-color: #121212; /* Dark background */
+            color: #e0e0e0; /* Light text */
+        }
+
+        .dark-mode .theme-switcher {
+            background-color: #333; /* Darker background for switcher */
+        }
+
+        .dark-mode .start-button {
+            background: linear-gradient(135deg, #6b73ff, #000dff); /* Existing gradient background */
+            box-shadow: 0 0 10px rgba(107, 115, 255, 0.7), 0 0 20px rgba(107, 115, 255, 0.5); /* Shining effect */
+        }
+
+        .dark-mode .start-button:hover {
+            transform: scale(1.1); /* Enlarge on hover */
+            box-shadow: 0 0 15px rgba(107, 115, 255, 0.7), 0 0 30px rgba(107, 115, 255, 0.5); /* Enhanced shining effect on hover */
+        }
+
+        /* Header styles */
+        header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 10px 20px;
+            background-color: #333; /* Dark grey background */
+            color: white;
+        }
+
+        header .title {
+            margin-left: auto;
+            margin-right: 20px;
+            font-size: 24px;
+        }
+
+        header .search-bar {
+            flex-grow: 1;
+            margin: 0 20px;
+            position: relative;
+        }
+
+        header .search-bar input {
+            width: 200px; /* Smaller width for the search bar */
+            padding: 8px 12px;
+            border-radius: 20px;
+            border: none;
+            font-size: 14px; /* Smaller font size */
+        }
+
+        /* Icons in the header */
+        header .icons {
+            display: flex;
+            align-items: center;
+        }
+
+        header .icons i {
+            margin: 0 10px;
+            cursor: pointer;
+            font-size: 20px;
+            padding: 10px; /* Padding to match button size */
+            border-radius: 50%;
+            transition: background-color 0.3s, color 0.3s;
+        }
+
+        /* Theme switcher button styling */
+        header .theme-switcher {
+            background-color: #444; /* Darker background for better visibility in light mode */
+            color: #e0e0e0; /* Light color for the icon */
+            padding: 10px;
+            border-radius: 50%;
+            cursor: pointer;
+        }
+
+        header .theme-icon {
+            font-size: 24px;
+        }
+
+        header .theme-icon.light-mode {
+            color: #333; /* Dark color for light mode icon */
+        }
+
+        header .theme-icon.dark-mode {
+            color: #e0e0e0; /* Light color for dark mode icon */
+        }
+
+        /* Account button styling to match theme button */
+        header .icons .fa-user-circle {
+            background-color: #444; /* Darker background for account button */
+            color: #e0e0e0; /* Light color for the account icon */
+            border-radius: 50%;
+        }
+
+        /* Optional hover effect for icons */
+        header .icons i:hover {
+            background-color: #555; /* Slightly lighter background on hover */
+            color: #fff; /* White color on hover */
+        }
+
+        .content {
+            flex: 1;
+            padding: 20px;
+            text-align: center;
+        }
+
+        .start-button {
+            display: inline-block;
+            padding: 15px 30px; /* Increase padding for a bigger button */
+            margin-top: 20px;
+            color: white;
+            text-decoration: none;
+            border-radius: 10px; /* Rounded corners */
+            font-size: 20px; /* Larger font size */
+            background: linear-gradient(135deg, #6b73ff, #000dff); /* Default gradient background */
+            box-shadow: 0 0 10px rgba(107, 115, 255, 0.7), 0 0 20px rgba(107, 115, 255, 0.5); /* Shining effect */
+            border: none;
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+
+        .start-button:hover {
+            transform: scale(1.1); /* Enlarge on hover */
+            box-shadow: 0 0 15px rgba(107, 115, 255, 0.7), 0 0 30px rgba(107, 115, 255, 0.5); /* Enhanced shining effect on hover */
+        }
+
+        .logged-in-content, .logged-out-content {
+            display: none; /* Hide sections by default */
+        }
+
+        .logged-in-content.active, .logged-out-content.active {
+            display: block; /* Show active section */
+        }
+    </style>
+</head>
+<body class="light-mode">
+    <header>
+        <div class="title">Chat AI BOT</div>
+        <div class="search-bar">
+            <input type="text" placeholder="Search...">
+        </div>
+        <div class="icons">
+            <i class="fas fa-bell"></i>
+            <i class="fas fa-user-circle"></i>
+            <div class="theme-switcher" onclick="toggleTheme()">
+                <i id="theme-icon" class="fas fa-sun theme-icon light-mode"></i>
+            </div>
+        </div>
+    </header>
+
+    <div class="content">
+        <div class="logged-in-content">
+            <h2>Welcome Back!</h2>
+            <a href="#continue-chatting" class="start-button">Continue Chatting</a>
+            <a href="#my-chats" class="start-button">My Chats</a>
+            <!-- Add the Test Mode link here -->
+            <a href="test101.html" class="start-button test-mode-link">Test Mode</a>
+        </div>
+
+        <div class="logged-out-content">
+            <p>Welcome to our Chatbot! We offer a variety of services and features to help you with your needs.</p>
+            <!-- Sign Up button updated to link to the sign-up page -->
+            <a href="signup/" class="start-button">Sign Up</a>
+        </div>
+    </div>
+
+    <script>
+        // Function to toggle between light and dark mode
+        function toggleTheme() {
+            const body = document.body;
+            const themeIcon = document.getElementById('theme-icon');
+
+            if (body.classList.contains('light-mode')) {
+                body.classList.remove('light-mode');
+                body.classList.add('dark-mode');
+                themeIcon.classList.remove('fa-sun');
+                themeIcon.classList.add('fa-moon');
+                themeIcon.classList.remove('light-mode');
+                themeIcon.classList.add('dark-mode');
+                localStorage.setItem('theme', 'dark');
+            } else {
+                body.classList.remove('dark-mode');
+                body.classList.add('light-mode');
+                themeIcon.classList.remove('fa-moon');
+                themeIcon.classList.add('fa-sun');
+                themeIcon.classList.remove('dark-mode');
+                themeIcon.classList.add('light-mode');
+                localStorage.setItem('theme', 'light');
+            }
+        }
+
+        // Function to check if user is logged in
+        function checkLoginStatus() {
+            const isLoggedIn = localStorage.getItem('isLoggedIn');
+            if (isLoggedIn === 'true') {
+                document.querySelector('.logged-in-content').classList.add('active');
+                // Show test mode link if logged in
+                document.querySelectorAll('.test-mode-link').forEach(link => link.classList.add('active'));
+            } else {
+                document.querySelector('.logged-out-content').classList.add('active');
+            }
+        }
+
+        // Initialize page content based on login status
+        window.onload = function() {
+            // Check theme preference
+            const savedTheme = localStorage.getItem('theme');
+            if (savedTheme) {
+                document.body.classList.remove('light', 'dark');
+                document.body.classList.add(savedTheme);
+                document.getElementById('theme-icon').classList.remove('fa-sun', 'fa-moon');
+                document.getElementById('theme-icon').classList.add(savedTheme === 'light' ? 'fa-sun' : 'fa-moon');
+            }
+
+            checkLoginStatus();
+        };
+    </script>
+</body>
+</html>
