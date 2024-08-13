@@ -4,7 +4,7 @@ Welcome to the **Web Chat Bot** project! This project is developed using Django 
 
 ## Project Overview
 
-The **Web Chat Bot** leverages Django for the web framework and uses OpenAI's API to provide interactive and intelligent responses in the chat interface. This project aims to demonstrate how to build a functional chat application with advanced AI capabilities.
+The **[Web Chat Bot](http://95.179.201.107)** leverages Django for the web framework and uses OpenAI's API to provide interactive and intelligent responses in the chat interface. This project aims to demonstrate how to build a functional chat application with advanced AI capabilities.
 
 ## Getting Started
 
@@ -36,11 +36,9 @@ To set up the project locally, follow the steps outlined in the `Getting_Started
 - **Contributing:** If you want to contribute to this project, please refer to the guidelines provided in the repository.
 - **License:** This project is licensed under the MIT License. Check the `LICENSE` file in the repository for details.
 
+## Current Realeases:
+- [DjangoChatBot v1.0](https://github.com/Aijcoder/DjangoChatBot/tree/main/DjangoChatBot%20V1.0): Basic version of the bot with light and dark theme.
+
 Feel free to explore, contribute, and make the most of this chat bot project. If you have any questions or need further assistance, please reach out through the project's issue tracker on GitHub.
 
 Happy coding!
-
-##Current realeases:
-- [DjangoChatBot v1.0](https://github.com/Aijcoder/DjangoChatBot/tree/main/DjangoChatBot%20V1.0): Basic version of the bot with light and dark theme.
-
-##Latest Version Is Now Running On: 95.179.201.107
